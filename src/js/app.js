@@ -1,6 +1,7 @@
 App = {
   web3Provider: null,
   contracts: {},
+  address: "0x5929590099b12ad2c63cb1b8812de9da2c707c3b",
 
   init: function() {
     return App.initWeb3();
@@ -21,13 +22,11 @@ App = {
   },
 
   initContract: function() {
-    $.getJSON('TutorialToken.json', function(data) {
+    $.getJSON('BITTOToken.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with truffle-contract.
-      var TutorialTokenArtifact = data;
-      App.contracts.TutorialToken = TruffleContract(TutorialTokenArtifact);
-
-      // Set the provider for our contract.
-      App.contracts.TutorialToken.setProvider(App.web3Provider);
+      var abi = data.abi;
+      var contract_class = web3.eth.contract(abi);
+      App.contracts.Token = contract_class.at(App.address);
 
       // Use our contract to retieve and mark the adopted pets.
       return App.getBalances();
@@ -43,55 +42,39 @@ App = {
   handleTransfer: function(event) {
     event.preventDefault();
 
-    var amount = parseInt($('#TTTransferAmount').val());
-    var toAddress = $('#TTTransferAddress').val();
+    var lines = $('#holders').val().split("\n");
+    var recipients = [];
+    var values = [];
+    lines.forEach(element => {
+      var data = element.split('\t');
+      recipients.push(data[1]);
+      values.push(web3.toWei(data[2], "ether"));
+    });
 
-    console.log('Transfer ' + amount + ' TT to ' + toAddress);
-
-    var tutorialTokenInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
+    App.contracts.Token.batchTransfer(recipients, values, function(error, result) {
       if (error) {
         console.log(error);
+        $('#console').html(error);
+      } else {
+        alert('Token dropped successfully!');
+        $('#console').html(`Token dropped to ${recipients.length} accounts`);
       }
-
-      var account = accounts[0];
-
-      App.contracts.TutorialToken.deployed().then(function(instance) {
-        tutorialTokenInstance = instance;
-
-        return tutorialTokenInstance.transfer(toAddress, amount, {from: account});
-      }).then(function(result) {
-        alert('Transfer Successful!');
-        return App.getBalances();
-      }).catch(function(err) {
-        console.log(err.message);
-      });
     });
   },
 
   getBalances: function() {
     console.log('Getting balances...');
 
-    var tutorialTokenInstance;
-
     web3.eth.getAccounts(function(error, accounts) {
       if (error) {
         console.log(error);
       }
-
       var account = accounts[0];
-
-      App.contracts.TutorialToken.deployed().then(function(instance) {
-        tutorialTokenInstance = instance;
-
-        return tutorialTokenInstance.balanceOf(account);
-      }).then(function(result) {
-        balance = result.c[0];
-
-        $('#TTBalance').text(balance);
-      }).catch(function(err) {
-        console.log(err.message);
+      $('#account').text(account);
+      console.log(account);
+      App.contracts.Token.balanceOf(account, function(error, result) {
+        if (error) console.log(error);
+        else $('#TTBalance').text(web3.fromWei(result, "ether"));
       });
     });
   }
