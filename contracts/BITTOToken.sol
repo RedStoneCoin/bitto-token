@@ -145,6 +145,7 @@ contract BITTOToken is ERC20,PoSTokenStandard,Ownable {
         delete transferIns[msg.sender];
         transferIns[msg.sender].push(transferInStruct(uint128(balances[msg.sender]),uint64(now)));
 
+        Transfer(address(0), msg.sender, reward);
         Mint(msg.sender, reward);
         return true;
     }
