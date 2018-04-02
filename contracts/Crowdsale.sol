@@ -27,7 +27,7 @@ contract Crowdsale is Ownable {
   address public wallet;
 
   // How many token units a buyer gets per wei
-  uint256 public rate = 950;
+  uint256 public rate = 650;
 
   // Amount of wei raised
   uint256 public weiRaised;
