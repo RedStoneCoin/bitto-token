@@ -65,8 +65,9 @@ contract BITTOToken is ERC20,PoSTokenStandard,Ownable {
     }
 
     function BITTOToken() public {
-        maxTotalSupply = 23 * 10**24; // 23 Mil.
-        totalInitialSupply = 18 * 10**24; // 18 Mil.
+        // 5 mil is reserved for POS rewards
+        maxTotalSupply = 223 * 10**23; // 22.3 Mil.
+        totalInitialSupply = 173 * 10**23; // 17.3 Mil. 10 mil = crowdsale, 7.3 team account
 
         chainStartTime = now;
         chainStartBlockNumber = block.number;
@@ -100,7 +101,7 @@ contract BITTOToken is ERC20,PoSTokenStandard,Ownable {
     function transferFrom(address _from, address _to, uint256 _value) onlyPayloadSize(3 * 32) public returns (bool) {
         require(_to != address(0));
 
-        var _allowance = allowed[_from][msg.sender];
+        uint256 _allowance = allowed[_from][msg.sender];
 
         // Check is not needed because sub(_allowance, _value) will already throw if this condition is not met
         // require (_value <= _allowance);
