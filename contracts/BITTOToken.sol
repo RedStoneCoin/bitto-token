@@ -22,7 +22,7 @@ contract PoSTokenStandard {
 contract BITTOToken is ERC20,PoSTokenStandard,Ownable {
     using SafeMath for uint256;
 
-    string public name = "BITTO Token";
+    string public name = "BITTO";
     string public symbol = "BITTO";
     uint public decimals = 18;
 
