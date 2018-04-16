@@ -169,23 +169,23 @@ contract Crowdsale is Ownable {
 
         if (now >= STAGE1_START_DATE && now < STAGE1_END_DATE) {
             if (_weiAmount >= 20 ether) {
-                bonus = _tokenAmount.mul(65).div(100);
+                bonus = _tokenAmount.mul(60).div(100);
             } else if (_weiAmount >= 10 ether) {
-                bonus = _tokenAmount.mul(45).div(100);
+                bonus = _tokenAmount.mul(48).div(100);
             } else if (_weiAmount >= 5 ether) {
-                bonus = _tokenAmount.mul(225).div(1000);
+                bonus = _tokenAmount.mul(20).div(100);
             } else if (_weiAmount >= 1 ether) {
-                bonus = _tokenAmount.mul(1125).div(10000);
+                bonus = _tokenAmount.mul(12).div(100);
             }
         } else if (now >= STAGE2_START_DATE && now < STAGE2_END_DATE) {
             if (_weiAmount >= 20 ether) {
-                bonus = _tokenAmount.mul(45).div(100);
+                bonus = _tokenAmount.mul(30).div(100);
             } else if (_weiAmount >= 10 ether) {
-                bonus = _tokenAmount.mul(225).div(1000);
+                bonus = _tokenAmount.mul(24).div(100);
             } else if (_weiAmount >= 5 ether) {
-                bonus = _tokenAmount.mul(1125).div(10000);
+                bonus = _tokenAmount.div(10);
             } else if (_weiAmount >= 1 ether) {
-                bonus = _tokenAmount.mul(5625).div(100000);
+                bonus = _tokenAmount.mul(6).div(100);
             }
         }
 
